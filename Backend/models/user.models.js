@@ -4,13 +4,15 @@ const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
     fullname: {
-        type: String,
-        required: true,
-        minLength: [3, 'First name must be at least 3 characters long'],
-    },
-    lastname: {
-        type: String,
-        minLength: [3, 'Last name must be at least 3 characters long'],
+        firstname: {
+            type: String,
+            required: true,
+            minLength: [3, 'First name must be at least 3 characters long'],
+        },
+        lastname: {
+            type: String,
+            minLength: [3, 'Last name must be at least 3 characters long'],
+        }
     },
     email: {
         type: String,
@@ -18,16 +20,16 @@ const userSchema = new mongoose.Schema({
         unique: true,
         minLength: [5, 'Email must be at least 5 characters long'],
     },
-    password:{
+    password: {
         type: String,
         required: true,
         select: false,
     },
-
     socketId: {
         type: String,
     }
-})
+});
+
 
 userSchema.methods.generateAuthToken = function() {
     const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET);    
