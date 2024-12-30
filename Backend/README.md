@@ -108,3 +108,114 @@ curl -X POST http://localhost:3000/users/register \
   }
 }
 ```
+
+# User Login Endpoint Documentation
+
+## Endpoint: `/users/login`
+
+### Method: POST
+
+### Description:
+This endpoint is used to log in a user. It requires the user's email and password.
+
+### Request Body:
+The request body should be a JSON object with the following structure:
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+### Validation:
+- `email`: Must be a valid email address.
+- `password`: Must be at least 6 characters long.
+
+### Responses:
+
+#### Success:
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "token": "string",
+    "user": {
+      "id": "string",
+      "fullname": {
+        "firstname": "string",
+        "lastname": "string"
+      },
+      "email": "string"
+    }
+  }
+  ```
+
+#### Client Errors:
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid email",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+  or
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Password must be at least 6 characters long",
+        "param": "password",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+#### Authentication Errors:
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Invalid email or password"
+  }
+  ```
+
+#### Server Errors:
+- **Status Code**: 500 Internal Server Error
+- **Response Body**:
+  ```json
+  {
+    "error": "An error occurred while logging in the user"
+  }
+  ```
+
+### Example Request:
+```bash
+curl -X POST http://localhost:3000/users/login \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}'
+```
+
+### Example Response:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGM3MmIyZjliMWU4YjAwMWM4ZTRiOGUiLCJpYXQiOjE2MjQ1MjY0MDB9.4Z5y6Q5y6Q5y6Q5y6Q5y6Q5y6Q5y6Q5y6Q5y6Q",
+  "user": {
+    "id": "60c72b2f9b1e8b001c8e4b8e",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  }
+}
+```
