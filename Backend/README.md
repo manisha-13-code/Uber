@@ -219,3 +219,103 @@ curl -X POST http://localhost:3000/users/login \
   }
 }
 ```
+
+# User Profile Endpoint Documentation
+
+## Endpoint: `/users/profile`
+
+### Method: GET
+
+### Description:
+This endpoint is used to get the profile of the authenticated user. It requires a valid JWT token.
+
+### Headers:
+- `Authorization`: Bearer token
+
+### Responses:
+
+#### Success:
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "id": "string",
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string"
+  }
+  ```
+
+#### Authentication Errors:
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+### Example Request:
+```bash
+curl -X GET http://localhost:3000/users/profile \
+-H "Authorization: Bearer <token>"
+```
+
+### Example Response:
+```json
+{
+  "id": "60c72b2f9b1e8b001c8e4b8e",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+# User Logout Endpoint Documentation
+
+## Endpoint: `/users/logout`
+
+### Method: GET
+
+### Description:
+This endpoint is used to log out the authenticated user. It requires a valid JWT token.
+
+### Headers:
+- `Authorization`: Bearer token
+
+### Responses:
+
+#### Success:
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "message": "Logged out successfully"
+  }
+  ```
+
+#### Authentication Errors:
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+### Example Request:
+```bash
+curl -X GET http://localhost:3000/users/logout \
+-H "Authorization: Bearer <token>"
+```
+
+### Example Response:
+```json
+{
+  "message": "Logged out successfully"
+}
+```
