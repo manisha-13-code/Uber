@@ -319,6 +319,7 @@ curl -X GET http://localhost:3000/users/logout \
   "message": "Logged out successfully"
 }
 ```
+
 # Captain Registration Endpoint Documentation
 
 ## Endpoint: `/captains/register`
@@ -333,16 +334,16 @@ The request body should be a JSON object with the following structure:
 ```json
 {
   "fullname": {
-    "firstname": "string",
-    "lastname": "string"
+    "firstname": "string", // Must be at least 3 characters long
+    "lastname": "string" // Must be at least 3 characters long
   },
-  "email": "string",
-  "password": "string",
+  "email": "string", // Must be a valid email address
+  "password": "string", // Must be at least 6 characters long
   "vehicle": {
-    "color": "string",
-    "plate": "string",
-    "capacity": "number",
-    "vehicleType": "string"
+    "color": "string", // Must be at least 3 characters long
+    "plate": "string", // Must be at least 3 characters long
+    "capacity": "number", // Must be a number
+    "vehicleType": "string" // Must be one of `car`, `motorcycle`, or `auto`
   }
 }
 ```
@@ -515,5 +516,240 @@ curl -X POST http://localhost:3000/captains/register \
       "vehicleType": "car"
     }
   }
+}
+```
+
+# Captain Login Endpoint Documentation
+
+## Endpoint: `/captains/login`
+
+### Method: POST
+
+### Description:
+This endpoint is used to log in a captain. It requires the captain's email and password.
+
+### Request Body:
+The request body should be a JSON object with the following structure:
+```json
+{
+  "email": "string", // Must be a valid email address
+  "password": "string" // Must be at least 6 characters long
+}
+```
+
+### Validation:
+- `email`: Must be a valid email address.
+- `password`: Must be at least 6 characters long.
+
+### Responses:
+
+#### Success:
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "token": "string",
+    "captain": {
+      "id": "string",
+      "fullname": {
+        "firstname": "string",
+        "lastname": "string"
+      },
+      "email": "string",
+      "vehicle": {
+        "color": "string",
+        "plate": "string",
+        "capacity": "number",
+        "vehicleType": "string"
+      }
+    }
+  }
+  ```
+
+#### Client Errors:
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid email",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+  or
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Password must be at least 6 characters long",
+        "param": "password",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+#### Authentication Errors:
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Invalid email or password"
+  }
+  ```
+
+#### Server Errors:
+- **Status Code**: 500 Internal Server Error
+- **Response Body**:
+  ```json
+  {
+    "error": "An error occurred while logging in the captain"
+  }
+  ```
+
+### Example Request:
+```bash
+curl -X POST http://localhost:3000/captains/login \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}'
+```
+
+### Example Response:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGM3MmIyZjliMWU4YjAwMWM4ZTRiOGUiLCJpYXQiOjE2MjQ1MjY0MDB9.4Z5y6Q5y6Q5y6Q5y6Q5y6Q5y6Q5y6Q5y6Q5y6Q",
+  "captain": {
+    "id": "60c72b2f9b1e8b001c8e4b8e",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+# Captain Profile Endpoint Documentation
+
+## Endpoint: `/captains/profile`
+
+### Method: GET
+
+### Description:
+This endpoint is used to get the profile of the authenticated captain. It requires a valid JWT token.
+
+### Headers:
+- `Authorization`: Bearer token
+
+### Responses:
+
+#### Success:
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "id": "string",
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string",
+    "vehicle": {
+      "color": "string",
+      "plate": "string",
+      "capacity": "number",
+      "vehicleType": "string"
+    }
+  }
+  ```
+
+#### Authentication Errors:
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+### Example Request:
+```bash
+curl -X GET http://localhost:3000/captains/profile \
+-H "Authorization: Bearer <token>"
+```
+
+### Example Response:
+```json
+{
+  "id": "60c72b2f9b1e8b001c8e4b8e",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "vehicle": {
+    "color": "red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+# Captain Logout Endpoint Documentation
+
+## Endpoint: `/captains/logout`
+
+### Method: GET
+
+### Description:
+This endpoint is used to log out the authenticated captain. It requires a valid JWT token.
+
+### Headers:
+- `Authorization`: Bearer token
+
+### Responses:
+
+#### Success:
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "message": "Logged out successfully"
+  }
+  ```
+
+#### Authentication Errors:
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+### Example Request:
+```bash
+curl -X GET http://localhost:3000/captains/logout \
+-H "Authorization: Bearer <token>"
+```
+
+### Example Response:
+```json
+{
+  "message": "Logged out successfully"
 }
 ```
