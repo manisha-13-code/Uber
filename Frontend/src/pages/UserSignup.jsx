@@ -1,89 +1,131 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { UserDataContext } from '../context/userContext';
 
-const Usersignup = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [userData, setUserData] = useState({})
-  const submitHandler = (e) => {
-    e.preventDefault()
-    setUserData({
-      fullName: {
-        firstName: firstName,
-        lastName: lastName
+const UserSignup = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [error, setError] = useState(null); // To handle errors
+
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserDataContext);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setError(null); // Reset error state before new request
+
+    const newUser = {
+      fullname: {
+        firstname: firstName,
+        lastname: lastName,
       },
-      email: email,
-      password: password
-    })
-    setEmail('')
-    setFirstName('')
-    setLastName('')
-    setPassword('')
-  }
+      email,
+      password,
+    };
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/register`,
+        newUser
+      );
+
+      if (response.status === 201) {
+        const data = response.data;
+        setUser(data.user);
+        navigate('/home');
+      }
+    } catch (err) {
+      setError('Failed to create account. Please try again.'); 
+      console.error('Error:', err); 
+    }
+
+    // Reset form fields
+    setEmail('');
+    setFirstName('');
+    setLastName('');
+    setPassword('');
+  };
+
   return (
-    <div className='p-7 h-screen flex flex-col justify-between'>
-      <div>
-        <img className='w-16 mb-10' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
-        <form onSubmit={(e) => {
-          submitHandler(e)
-        }}>
-          <h3 className='tex-lg font-medium mb-2'>What's your name</h3>
-          <div className='flex gap-4'>
+    <div>
+      <div className="p-7 h-screen flex flex-col justify-between">
+        <div>
+          <img
+            className="w-16 mb-10"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYQy-OIkA6In0fTvVwZADPmFFibjmszu2A0g&s"
+            alt=""
+          />
+
+          <form onSubmit={submitHandler}>
+            <h3 className="text-lg w-1/2 font-medium mb-2">What's your name</h3>
+            <div className="flex gap-4 mb-7">
+              <input
+                required
+                className="bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base"
+                type="text"
+                placeholder="First name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <input
+                required
+                className="bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base"
+                type="text"
+                placeholder="Last name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+
+            <h3 className="text-lg font-medium mb-2">What's your email</h3>
             <input
-              className='bg-[#eeeeee] mb-5 w-1/2 rounded px-4 py-2 text-base placeholder:text-sm'
-              type="text"
               required
-              placeholder='First name'
-              value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value)
-              }}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base"
+              type="email"
+              placeholder="email@example.com"
             />
 
+            <h3 className="text-lg font-medium mb-2">Enter Password</h3>
             <input
-              className='bg-[#eeeeee] mb-5 w-1/2 rounded px-4 py-2 text-base placeholder:text-sm'
-              type="text"
+              className="bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder='Last name'
-              value={lastName}
-              onChange={(e) => {
-                setLastName(e.target.value)
-              }}
+              type="password"
+              placeholder="password"
             />
-          </div>
-          <h3 className='tex-base font-medium mb-2'>What's your email</h3>
-          <input
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value)
-            }}
-            className='bg-[#eeeeee] mb-5 rounded px-4 py-2 w-full text-base placeholder:text-sm'
-            type="email"
-            required
-            placeholder='email@example.com'
-          />
-          <h3 className='tex-base font-medium mb-2'>Enter password</h3>
-          <input
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value)
-            }}
-            className='bg-[#eeeeee] mb-5 rounded px-4 py-2 w-full text-lg placeholder:text-base'
-            type="password"
-            required
-            placeholder='password' />
-          <button className='bg-black text-white rounded px-4 py-2 w-full text-lg placeholder:text-base'>Login</button>
-        </form>
-        <p className='text-center mt-5'>Already have a account? <Link to='/login' className='text-blue-600'>Login here</Link></p>
-      </div>
-      <div>
-        <p className='text-[6px]'>This site is protected by reCAPTCHA and the <span className='underline font-bold'>Google Privacy Policy</span> and <span className='underline font-bold'>Terms of Services apply</span>
-        </p>
+
+            <button
+              className="bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base"
+            >
+              Create account
+            </button>
+          </form>
+
+          {error && <p className="text-red-500 text-center mt-4">{error}</p>} {/* Error display */}
+
+          <p className="text-center">
+            Already have an account?{' '}
+            <Link to="/login" className="text-blue-600">
+              Login here
+            </Link>
+          </p>
+        </div>
+        <div>
+          <p className="text-[10px] leading-tight">
+            This site is protected by reCAPTCHA and the{' '}
+            <span className="underline">Google Privacy Policy</span> and{' '}
+            <span className="underline">Terms of Service apply</span>.
+          </p>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Usersignup
+export default UserSignup;
