@@ -15,7 +15,7 @@ const UserSignup = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error state before new request
+    setError(null); 
 
     const newUser = {
       fullname: {
@@ -35,6 +35,7 @@ const UserSignup = () => {
       if (response.status === 201) {
         const data = response.data;
         setUser(data.user);
+        localStorage.setItem('token', data.token)
         navigate('/home');
       }
     } catch (err) {
