@@ -31,11 +31,11 @@ const CaptainSignup = () => {
           color: vehicleColor,
           plate: veiclePlate,
           capacity: vehicleCapacity,
-          type: vehicleType
+          vehicleType: vehicleType
         }
       }
 
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/signup`, captainData)
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
 
       if(response.status === 201) {
         const data = response.data
