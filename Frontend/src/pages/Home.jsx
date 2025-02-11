@@ -17,9 +17,12 @@ const Home = () => {
   const vehiclePanelRef = React.useRef(null)
   const confirmRidePanelRef = React.useRef(null)
   const vehicleFoundRef = React.useRef(null)
+  const waitingForDriverRef = React.useRef(null)
+
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false)
   const [confirmRidePanel, setConfirmRidePanel] = useState(false)
   const [vehicleFound, setVehicleFound] = useState(false)
+  const [waitingFordriver, setWaitingFordriver] = useState(false)
   const submitHandler = async (e) => {
     e.preventDefault();
   }
@@ -79,6 +82,18 @@ const Home = () => {
     })
    }
    }, [vehicleFound])
+
+   useGSAP(function() {
+    if(waitingFordriver) {
+     gsap.to(waitingForDriverRef.current, {
+       transform:'translateY(0)'
+     })
+    } else {
+     gsap.to(waitingForDriverRef.current, {
+       transform:'translateY(100%)'
+    })
+   }
+   }, [waitingFordriver])
 
   return (
     <div className='h-screen relative overflow-hidden'>
