@@ -7,6 +7,7 @@ import Vehiclepanel from '../components/Vehiclepanel'
 import ConfirmRide from '../components/ConfirmRide'
 import LookingForDriver from '../components/LookingForDriver'
 import WaitingForDriver from '../components/WaitingForDriver'
+import RidePopUp from '../components/RidePopUp'
 
 const Home = () => {
   const [pickup, setPickup] = useState('')
@@ -155,7 +156,7 @@ const Home = () => {
       </div>
 
       
-      <div ref={waitingForDriverRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12'>
+      <div ref={waitingForDriverRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12 translate-y-full'>
        <WaitingForDriver setWaitingFordriver={setWaitingFordriver}/>
       </div>
     </div>
