@@ -1,8 +1,8 @@
 import React from 'react'
 
-const ConfirmRidePopUp = () => {
+const ConfirmRidePopUp = (props) => {
   return (
-    <div>
+    <div className='h-screen'>
             <h5 className='p-3 text-center w-[93%] absolute top-0'
                 onClick={() => {
                     props.setConfirmRidePanel(false)

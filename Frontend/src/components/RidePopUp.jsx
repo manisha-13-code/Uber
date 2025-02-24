@@ -10,7 +10,7 @@ const RidePopUp = (props) => {
             ><i className="text-3xl text-gray-200 ri-arrow-down-wide-fill"></i></h5>
             <h3 className='text-2xl font-semibold mb-5'>New Ride Available!</h3>
 
-            <div className='flex items-center justify-between mt-4 p-3 bg-gray-200 rounded-lg'>
+            <div className='flex items-center justify-between mt-4 p-3 bg-yellow-400 rounded-lg'>
                 <div className='flex items-center justify-start gap-3'>
                     <img className='h-10 w-10 rounded-full object-cover' src="https://imgs.search.brave.com/h0NzAlc6Ad_QwzfEPRdT2kDTYBEsdN8oqeApk5-PfvA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAyLzQzLzEyLzM0/LzM2MF9GXzI0MzEy/MzQ2M196VG9vdWI1/NTd4RVdBQkRMazBq/SmtsRHlMU0dsMmpy/ci5qcGc" />
                     <h2 className='text-xl font-medium'>Harsh Patel</h2>

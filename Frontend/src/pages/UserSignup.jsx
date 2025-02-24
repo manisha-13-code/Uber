@@ -43,7 +43,6 @@ const UserSignup = () => {
       console.error('Error:', err); 
     }
 
-    // Reset form fields
     setEmail('');
     setFirstName('');
     setLastName('');
@@ -108,7 +107,7 @@ const UserSignup = () => {
             </button>
           </form>
 
-          {error && <p className="text-red-500 text-center mt-4">{error}</p>} {/* Error display */}
+          {error && <p className="text-red-500 text-center mt-4">{error}</p>} 
 
           <p className="text-center">
             Already have an account?{' '}
