@@ -39,7 +39,7 @@ const CaptainSignup = () => {
       if(response.status === 201) {
         const data = response.data
         setCaptain(data.captain)
-        localStorage.setItem('captain', data.token)
+        localStorage.setItem('token', data.token)
         navigate('/captain-home')
 
       }
