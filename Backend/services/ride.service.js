@@ -23,6 +23,8 @@ async function getFare(pickup, destination) {
     return fare;
 }
 
+module.exports.getFare = getFare;
+
 module.exports.createRide = async ({user, pickup, destination, vehicleType}) => {
     if(!user || !pickup || !destination || !vehicleType) {
         throw new Error('User, Pickup, Destination and Vehicle Type are required');
@@ -36,4 +38,5 @@ module.exports.createRide = async ({user, pickup, destination, vehicleType}) => 
     });
     return ride;
 }
+
 
