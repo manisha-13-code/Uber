@@ -753,3 +753,72 @@ curl -X GET http://localhost:3000/captains/logout \
   "message": "Logged out successfully"
 }
 ```
+
+# Ride Fare Endpoint Documentation
+
+## Endpoint: `/rides/get-fare`
+
+### Method: GET
+
+### Description:
+This endpoint retrieves the fare for a ride based on the specified pickup and destination addresses. It calculates the distance and duration using the map service and then computes fares for different vehicle types.
+
+### Request Query Parameters:
+- `pickup` (string, required): The pick-up location address.
+- `destination` (string, required): The destination address.
+
+### Validation:
+- Both `pickup` and `destination` must be at least 3 characters long.
+
+### Responses:
+
+#### Success:
+- **Status Code**: 200 OK
+- **Response Body** (example):
+  ```json
+  {
+    "auto": 120,
+    "car": 180,
+    "moto": 96
+  }
+  ```
+  The response returns fare estimates for each vehicle type.
+
+#### Client Errors:
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid destination address",
+        "param": "pickup",
+        "location": "query"
+      }
+    ]
+  }
+  ```
+
+#### Server Errors:
+- **Status Code**: 500 Internal Server Error
+- **Response Body**:
+  ```json
+  {
+    "message": "Internal server error.."
+  }
+  ```
+
+### Example Request:
+```bash
+curl -X GET "http://localhost:3000/rides/get-fare?pickup=LocationA&destination=LocationB" \
+-H "Authorization: Bearer <token>"
+```
+
+### Example Response:
+```json
+{
+  "auto": 120,
+  "car": 180,
+  "moto": 96
+}
+```

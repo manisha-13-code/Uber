@@ -26,6 +26,8 @@ const Home = () => {
   const [confirmRidePanel, setConfirmRidePanel] = useState(false)
   const [vehicleFound, setVehicleFound] = useState(false)
   const [waitingFordriver, setWaitingFordriver] = useState(false)
+  const [fare, setFare] = useState({})
+  const [vehicleType, setVehicleType] = useState(null)
   
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -108,9 +110,43 @@ const Home = () => {
       })
     }
   }, [waitingFordriver])
+  
+  async function findTrip() {
+    setVehiclePanelOpen(true)
+    setPanelOpen(false)
+
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+      params: {
+        pickup,
+        destination,
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    
+    setFare(response.data)
+}
+
+async function createRide() {
+  const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+    params: {
+      pickup,
+      destination,
+      vehicleType
+    },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+  console.log(response.data)
+
+}
+
 
   return (
-    <div className='h-screen relative overflow-hidden'>
+    <div className
+    ='h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" />
       <div onClick={()=> { setVehiclePanelOpen(false) }} className='h-screen w-screen'>
         <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
@@ -146,7 +182,9 @@ const Home = () => {
               placeholder='Enter your destination'
             />
           </form>
-          <button className='bg-black text-white text-lg font-bold py-2 rounded-lg mt-3 w-full'>
+          <button
+          onClick={findTrip}
+           className='bg-black text-white text-lg font-bold py-2 rounded-lg mt-3 w-full'>
             Find Trip
           </button>
         </div>
@@ -160,14 +198,30 @@ const Home = () => {
         </div>
       </div>
       <div ref={vehiclePanelRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-10 translate-y-full'>
-       <Vehiclepanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanelOpen={setVehiclePanelOpen}/>
+       <Vehiclepanel
+        selectVehicle={setVehicleType}
+        fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanelOpen={setVehiclePanelOpen}/>
       </div>
       <div ref={confirmRidePanelRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12 translate-y-full'>
-       <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound}/>
+       <ConfirmRide 
+       createRide={createRide}
+       pickup={pickup}
+       destination={destination}
+       fare={fare}
+       vehicleType={vehicleType}
+       setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound}/>
       </div>
+
       <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12 translate-y-full'>
-       <LookingForDriver setVehicleFound={setVehicleFound}/>
+       <LookingForDriver
+       createRide={createRide}
+       pickup={pickup}
+       destination={destination}
+       fare={fare}
+       vehicleType={vehicleType}
+        setVehicleFound={setVehicleFound}/>
       </div>
+      
       <div ref={waitingForDriverRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12 translate-y-full'>
        <WaitingForDriver setWaitingFordriver={setWaitingFordriver}/>
       </div>
