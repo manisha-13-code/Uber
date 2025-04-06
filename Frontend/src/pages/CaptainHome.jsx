@@ -41,8 +41,12 @@ const CaptainHome = () => {
   const locationInterval = setInterval(updateLocation, 10000)
   updateLocation()
 
-  return () => clearInterval(locationInterval)
+  // return () => clearInterval(locationInterval)
 
+})
+
+socket.on('new-ride', (data) => {
+  console.log('new ride', data)
 })
     
   useGSAP(function() {
