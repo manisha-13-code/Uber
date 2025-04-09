@@ -35,7 +35,8 @@ module.exports.createRide = async (req, res) => {
 
         ride.otp = "";
 
-        captainInradius.forEach((captain) => {
+        captainInradius.map((captain) => {
+            console.log(captain, ride)
             sendMessageToSocketId(captain.socketId, {
                 event: 'new-ride',
                 data: ride

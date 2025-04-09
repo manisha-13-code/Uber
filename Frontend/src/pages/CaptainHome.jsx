@@ -30,13 +30,15 @@ const CaptainHome = () => {
         socket.emit('update-location-captain', {
           userId: captain._id,
           location: {
-            ltd: position.coords.latitude,
+            lat: position.coords.latitude,
             lng: position.coords.longitude
           }
         })
       })
   }
-    
+    else {
+      console.log('Geolocation is not supported by this browser.')
+    }
   }
   const locationInterval = setInterval(updateLocation, 10000)
   updateLocation()
