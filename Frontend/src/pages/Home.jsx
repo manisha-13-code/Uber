@@ -13,7 +13,6 @@ import { SocketContext } from '../context/SocketContext'
 import { UserDataContext } from '../context/userContext'
 
 
-
 const Home = () => {
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState('')
@@ -29,7 +28,6 @@ const Home = () => {
   const { socket } = React.useContext(SocketContext)
   const { user } = React.useContext(UserDataContext)
 
-  
   
   useEffect(() => {
     console.log(user)
