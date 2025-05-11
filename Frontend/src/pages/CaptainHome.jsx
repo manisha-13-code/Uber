@@ -10,8 +10,9 @@ import { SocketContext } from '../context/SocketContext'
 import { CaptainDataContext } from '../context/CaptainContext'
 const CaptainHome = () => {
 
-  const  [ridePopupPanel, setRidePopupPanel] = useState(true)
+  const  [ridePopupPanel, setRidePopupPanel] = useState(false)
   const  [ConfirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false)
+  const [ride, setRide] = useState(null)
 
   const ridePopupPanelRef = React.useRef(null)
   const confirmRidePopupPanelRef = React.useRef(null)
@@ -49,7 +50,13 @@ const CaptainHome = () => {
 
 socket.on('new-ride', (data) => {
   console.log('new ride', data)
+  setRide(data)
+  setRidePopupPanel(true)
 })
+
+async function confirmRide() {
+  
+}
     
   useGSAP(function() {
       if(ridePopupPanel) {
@@ -74,6 +81,7 @@ socket.on('new-ride', (data) => {
       })
      }
      }, [ConfirmRidePopupPanel])
+
   return (
     <div className='h-screen'>
 
@@ -93,7 +101,12 @@ socket.on('new-ride', (data) => {
       </div>
 
       <div ref={ridePopupPanelRef} className='fixed w-full translate-y-full bottom-0 bg-white px-3 py-10'>
-        <RidePopUp setRidePopupPanel={setRidePopupPanel} setConfirmRidePopupPanel={setConfirmRidePopupPanel}/>
+        <RidePopUp 
+        ride={ride}
+        setRidePopupPanel={setRidePopupPanel} 
+        setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+        confirmRide={confirmRide}
+        />
       </div>
 
       <div ref={confirmRidePopupPanelRef} className='fixed w-full translate-y-full bottom-0 h-screen bg-white px-3 py-10'>
