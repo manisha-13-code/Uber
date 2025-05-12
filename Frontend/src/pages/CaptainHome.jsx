@@ -55,7 +55,11 @@ socket.on('new-ride', (data) => {
 })
 
 async function confirmRide() {
-  
+
+  const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/rides/confirm-ride`, {
+
+  })
+
 }
     
   useGSAP(function() {
